@@ -26,6 +26,11 @@ public class TeacherService {
         this.departmentRepo = departmentRepo;
     }
 
+    public Iterable<TeacherEntity> getAllTeachers() {
+        var teachers = teacherRepo.findAll();
+        return teachers;
+    }
+
     public TeacherEntity createTeacher(String name, String bio, AcademicDegree academicDegree, 
     AcademicRank academicRank, UUID departmentId) throws DepartmentNotFoundException {
         DepartmentEntity department = departmentRepo.findById(departmentId)

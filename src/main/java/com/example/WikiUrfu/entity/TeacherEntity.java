@@ -2,6 +2,7 @@ package com.example.WikiUrfu.entity;
 
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -9,20 +10,31 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "teachers")
 public class TeacherEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(length = 80, nullable = false)
     private String name;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String bio;
+
     @Enumerated(EnumType.STRING)
     private AcademicDegree academicDegree;
+
     @Enumerated(EnumType.STRING)
     private AcademicRank academicRank;
+
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = true)
     private DepartmentEntity department;
