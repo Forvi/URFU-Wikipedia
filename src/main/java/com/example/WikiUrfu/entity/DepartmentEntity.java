@@ -4,16 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "departments")
@@ -33,6 +24,10 @@ public class DepartmentEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<TeacherEntity> teacher = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "institute_id")
+    private InstitutesEntity institute;
+
     public DepartmentEntity() {
     }    
 
@@ -45,13 +40,9 @@ public class DepartmentEntity {
         return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) {this.name = name;}
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
     public void setDescription(String description) {
         this.description = description;
