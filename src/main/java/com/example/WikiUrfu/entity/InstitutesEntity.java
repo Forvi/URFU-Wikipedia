@@ -2,7 +2,6 @@ package com.example.WikiUrfu.entity;
 
 
 import jakarta.persistence.*;
-import jdk.jfr.Name;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +52,4 @@ public class InstitutesEntity {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
-
-
 }

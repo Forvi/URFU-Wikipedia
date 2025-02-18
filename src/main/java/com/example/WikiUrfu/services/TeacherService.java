@@ -14,6 +14,7 @@ import com.example.WikiUrfu.exceptions.TeacherNotFoundException;
 import com.example.WikiUrfu.repository.DepartmentRepo;
 import com.example.WikiUrfu.repository.TeacherRepo;
 
+
 @Service
 public class TeacherService {
     

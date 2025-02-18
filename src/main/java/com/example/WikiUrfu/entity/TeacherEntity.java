@@ -2,6 +2,7 @@ package com.example.WikiUrfu.entity;
 
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -35,7 +36,7 @@ public class TeacherEntity {
     @Enumerated(EnumType.STRING)
     private AcademicRank academicRank;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "department_id", nullable = true)
     private DepartmentEntity department;
 
