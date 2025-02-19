@@ -1,7 +1,7 @@
 package com.example.WikiUrfu.services;
 
 
-import com.example.WikiUrfu.entity.InstitutesEntity;
+import com.example.WikiUrfu.entity.InstituteEntity;
 import com.example.WikiUrfu.exceptions.InstituteNotFoundException;
 import com.example.WikiUrfu.repository.InstituteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,25 +18,25 @@ public class InstituteService {
         this.institutesRepo = instituteRepo;
     }
 
-    public InstitutesEntity createInstitute (String name, String description) throws Exception {
+    public InstituteEntity createInstitute (String name, String description) throws Exception {
         try {
-            InstitutesEntity institute = new InstitutesEntity(name, description);
+            InstituteEntity institute = new InstituteEntity(name, description);
             return institutesRepo.save(institute);
         } catch(Exception e) {
             throw new Exception(e.getMessage());
         }
     }
 
-    public Iterable<InstitutesEntity> getAllInstitutes() throws Exception {
+    public Iterable<InstituteEntity> getAllInstitutes() throws Exception {
         try {
-            Iterable<InstitutesEntity> institutes = institutesRepo.findAll();
+            Iterable<InstituteEntity> institutes = institutesRepo.findAll();
             return institutes;
         } catch(Exception e) {
             throw new Exception(e.getMessage());
         }
     }
 
-    public InstitutesEntity getInstituteById(UUID institiute_id) throws Exception {
+    public InstituteEntity getInstituteById(UUID institiute_id) throws Exception {
         try {
             var institute = institutesRepo.findById(institiute_id)
                 .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));

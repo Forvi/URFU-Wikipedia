@@ -1,11 +1,18 @@
 package com.example.WikiUrfu.DTOs;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.UUID;
 
 public class DepartmentRequestDto {
     private String name;
     private String description;
-    private UUID institiute_id;
+
+    @JsonProperty("institute_id")
+    private UUID institute_id;
+
+    public DepartmentRequestDto() {
+    }
 
     public String getName() {
         return name;
@@ -14,22 +21,9 @@ public class DepartmentRequestDto {
     public String getDescription() {
         return description;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     
-    public UUID getInstitiute_id() {
-        return institiute_id;
-    }
-
-    public void setInstitiute_id(UUID institiute_id) {
-        this.institiute_id = institiute_id;
+    public UUID getInstituteId() {
+        return institute_id;
     }
 
     @Override

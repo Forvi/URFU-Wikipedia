@@ -2,6 +2,9 @@ package com.example.WikiUrfu.services;
 
 import java.util.UUID;
 
+import com.example.WikiUrfu.entity.InstituteEntity;
+import com.example.WikiUrfu.exceptions.InstituteNotFoundException;
+import com.example.WikiUrfu.repository.InstituteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,26 +19,31 @@ public class DepartmentService {
     
     private final DepartmentRepo departmentRepo;
     private final TeacherRepo teacherRepo;
+    private final InstituteRepo instituteRepo;
 
     @Autowired
-    public DepartmentService(DepartmentRepo departmentRepo, TeacherRepo teacherRepo) {
+    public DepartmentService(DepartmentRepo departmentRepo, TeacherRepo teacherRepo, InstituteRepo instituteRepo) {
         this.departmentRepo = departmentRepo;
         this.teacherRepo = teacherRepo;
+        this.instituteRepo = instituteRepo;
     }
     
-    public DepartmentEntity createDepartment(String name, String description) throws Exception {
+    public DepartmentEntity createDepartment(String name, String description, UUID instituteId) throws Exception {
         try {
-            DepartmentEntity department = new DepartmentEntity(name, description);
+            InstituteEntity institute = instituteRepo.findById(instituteId)
+                    .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
+
+            DepartmentEntity department = new DepartmentEntity(name, description, institute);
+
             return departmentRepo.save(department);
         } catch (Exception e) {
-            throw new Exception(e.getMessage()); //Под рефактор
+            throw new Exception(e.getMessage());
         }
     }
 
     public Iterable<DepartmentEntity> getAllDepartments() throws Exception {
         try {
-            var departments = departmentRepo.findAll();
-            return departments;
+            return departmentRepo.findAll();
         } catch(Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -43,10 +51,8 @@ public class DepartmentService {
 
     public DepartmentEntity addTeacherToDepartment(UUID department_id, TeacherEntity teacher) throws Exception {
         try {
-            DepartmentEntity department = departmentRepo.findById(department_id).get();
-            
-            if(department == null)
-                throw new DepartmentNotFoundException("Кафедра не найдена");
+            DepartmentEntity department = departmentRepo.findById(department_id)
+                    .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));;
 
             teacher.setDepartment(department);
             teacherRepo.save(teacher);

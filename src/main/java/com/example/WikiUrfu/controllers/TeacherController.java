@@ -2,6 +2,7 @@ package com.example.WikiUrfu.controllers;
 
 import java.util.UUID;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +31,7 @@ public class TeacherController {
     }
     
     @PostMapping
-    public ResponseEntity<?> createTeacher(@RequestBody TeacherRequestDto request) throws Exception {
+    public ResponseEntity<?> createTeacher(@RequestBody @Valid TeacherRequestDto request) throws Exception {
         try {
 
             TeacherEntity teacher = teachersService.createTeacher(

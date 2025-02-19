@@ -5,11 +5,22 @@ import java.util.UUID;
 import com.example.WikiUrfu.entity.AcademicDegree;
 import com.example.WikiUrfu.entity.AcademicRank;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.*;
 
 public class TeacherRequestDto {
+
+    @Pattern(regexp = "^[А-Яа-яЁё\\s]+$", message = "Имя может содержать только буквы русского алфавита")
+    @Size(min = 2, max = 50, message = "Некорректная длина")
+    @NotEmpty(message = "Имя не может быть пустым")
+    @NotNull()
     private String name;
+
+    @Size(min = 2, max = 1000, message = "Некорректная длина")
+    @NotNull()
     private String bio;
+
     private AcademicDegree academicDegree;
+
     private AcademicRank academicRank;
 
     @JsonProperty("department_id")

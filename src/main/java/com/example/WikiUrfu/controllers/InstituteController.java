@@ -2,7 +2,7 @@ package com.example.WikiUrfu.controllers;
 
 
 import com.example.WikiUrfu.DTOs.CreateInstituteRequestDto;
-import com.example.WikiUrfu.entity.InstitutesEntity;
+import com.example.WikiUrfu.entity.InstituteEntity;
 import com.example.WikiUrfu.services.InstituteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class InstituteController {
     @PostMapping
     public ResponseEntity<?> createInstitute (@RequestBody CreateInstituteRequestDto request) {
         try {
-            InstitutesEntity institute = instituteService.createInstitute(request.getName(), request.getDescription());
+            InstituteEntity institute = instituteService.createInstitute(request.getName(), request.getDescription());
             return ResponseEntity.ok(institute);
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

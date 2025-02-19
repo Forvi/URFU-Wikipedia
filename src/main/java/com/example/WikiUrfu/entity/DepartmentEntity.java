@@ -29,14 +29,15 @@ public class DepartmentEntity {
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "institute_id")
     @JsonBackReference
-    private InstitutesEntity institute;
+    private InstituteEntity institute;
 
     public DepartmentEntity() {
     }    
 
-    public DepartmentEntity(String name, String description) {
+    public DepartmentEntity(String name, String description, InstituteEntity institute) {
         this.name = name;
         this.description = description;
+        this.institute = institute;
     }
 
     public UUID getId() {

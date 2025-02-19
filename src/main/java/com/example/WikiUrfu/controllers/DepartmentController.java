@@ -36,8 +36,9 @@ public class DepartmentController {
         try {
             DepartmentEntity department = departmentService.createDepartment(
                 request.getName(), 
-                request.getDescription()
-                );
+                request.getDescription(),
+                request.getInstituteId()
+            );
 
             return ResponseEntity.ok(department);
         } catch(DepartmentNotFoundException e) {

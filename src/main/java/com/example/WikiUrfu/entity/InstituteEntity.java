@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table (name = "institutes")
-public class InstitutesEntity {
+public class InstituteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -27,11 +27,10 @@ public class InstitutesEntity {
     @JsonManagedReference
     private List<DepartmentEntity> departments = new ArrayList<>();
 
-    public InstitutesEntity() {
-
+    public InstituteEntity() {
     }
 
-    public InstitutesEntity(String name, String description) {
+    public InstituteEntity(String name, String description) {
         this.name = name;
         this.description = description;
     }
