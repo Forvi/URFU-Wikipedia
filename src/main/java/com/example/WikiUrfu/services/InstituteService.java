@@ -2,7 +2,6 @@ package com.example.WikiUrfu.services;
 
 
 import com.example.WikiUrfu.entity.InstitutesEntity;
-import com.example.WikiUrfu.exceptions.InstituteAlreadyExistsException;
 import com.example.WikiUrfu.exceptions.InstituteNotFoundException;
 import com.example.WikiUrfu.repository.InstituteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class InstituteService {
             InstitutesEntity institute = new InstitutesEntity(name, description);
             return institutesRepo.save(institute);
         } catch(Exception e) {
-            throw new InstituteAlreadyExistsException("Институт уже существует");
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -37,8 +36,21 @@ public class InstituteService {
         }
     }
 
+    public InstitutesEntity getInstituteById(UUID institiute_id) throws Exception {
+        try {
+            var institute = institutesRepo.findById(institiute_id)
+                .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
+
+            return institute;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
     public UUID deleteInstituteById(UUID institute_id) throws Exception {
-        institutesRepo.findById(institute_id).orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
+        institutesRepo.findById(institute_id)
+            .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
+
         institutesRepo.deleteById(institute_id);
         return institute_id;
     }

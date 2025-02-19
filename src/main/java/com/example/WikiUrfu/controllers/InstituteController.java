@@ -40,10 +40,21 @@ public class InstituteController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteInstituteById(@PathVariable UUID institute_id)throws Exception {
+    @GetMapping("/{institute_id}")
+    public ResponseEntity<?> getInstituteById(@PathVariable UUID institute_id) throws Exception {
+        try {
+            var institute = instituteService.getInstituteById(institute_id);
+            return ResponseEntity.ok().body(institute);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{institute_id}")
+    public ResponseEntity<?> deleteInstituteById(@PathVariable UUID institute_id) throws Exception {
         try {
             instituteService.deleteInstituteById(institute_id);
+            System.out.println(institute_id);
             return ResponseEntity.ok("Институт был успешно удалён");
         } catch(Exception e){
             return ResponseEntity.status(404).body(e.getMessage());

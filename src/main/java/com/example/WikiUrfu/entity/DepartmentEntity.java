@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -24,8 +26,9 @@ public class DepartmentEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<TeacherEntity> teacher = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "institute_id")
+    @JsonBackReference
     private InstitutesEntity institute;
 
     public DepartmentEntity() {

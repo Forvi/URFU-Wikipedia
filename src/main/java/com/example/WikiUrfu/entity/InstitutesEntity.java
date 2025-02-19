@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table (name = "institutes")
 public class InstitutesEntity {
@@ -22,6 +24,7 @@ public class InstitutesEntity {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "institute", orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<DepartmentEntity> departments = new ArrayList<>();
 
     public InstitutesEntity() {
@@ -51,5 +54,9 @@ public class InstitutesEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<DepartmentEntity> getDepartments() {
+        return departments;
     }
 }
