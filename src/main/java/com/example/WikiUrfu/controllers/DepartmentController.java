@@ -42,7 +42,7 @@ public class DepartmentController {
 
             return ResponseEntity.ok(department);
         } catch(DepartmentNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(404).body(e.getMessage());
         } catch(Exception e) {
             return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage());
         }
@@ -58,6 +58,18 @@ public class DepartmentController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getDepartmentById(@PathVariable UUID id) throws Exception {
+        try {
+            var department = departmentService.getDepartmentById(id);
+            return ResponseEntity.ok(department);
+        } catch (DepartmentNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage());
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> addTeacherToDepartment(@PathVariable UUID id, 
     @RequestBody AddToDepartmentRequestDto request) throws Exception {
@@ -69,7 +81,7 @@ public class DepartmentController {
                 request.getAcademicRank(),
                 request.getDepartment()
             );
-    
+
             departmentService.addTeacherToDepartment(id, teacher);
             return ResponseEntity.ok().body("Преподаватель успешно добавлен на кафедру");
         } catch (DepartmentNotFoundException e) {
@@ -84,8 +96,10 @@ public class DepartmentController {
         try {
             departmentService.deleteDepartment(id);
             return ResponseEntity.ok().body("Кафедра успешно удалена из базы");
-        } catch(DepartmentNotFoundException e) {
-            throw new DepartmentNotFoundException(e.getMessage());
+        } catch (DepartmentNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage());
         }
     }
 }

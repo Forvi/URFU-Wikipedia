@@ -1,6 +1,5 @@
 package com.example.WikiUrfu.entity;
 
-
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class InstituteEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "institute", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "institute", orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<DepartmentEntity> departments = new ArrayList<>();
 

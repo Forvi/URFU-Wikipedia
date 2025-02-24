@@ -23,11 +23,11 @@ public class DepartmentEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<TeacherEntity> teacher = new ArrayList<>();
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "department", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<TeacherEntity> teachers = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "institute_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "institute_id", nullable = false)
     @JsonBackReference
     private InstituteEntity institute;
 
@@ -59,14 +59,14 @@ public class DepartmentEntity {
     }
 
     public void addTeacher(TeacherEntity teacher) {
-        this.teacher.add(teacher);
+        this.teachers.add(teacher);
     }
 
     public void setTeachersList(List<TeacherEntity> teachers) {
-        this.teacher = teachers;
+        this.teachers = teachers;
     }
 
     public List<TeacherEntity> getTeacher() {
-        return teacher;
+        return teachers;
     }
 } 

@@ -49,6 +49,16 @@ public class DepartmentService {
         }
     }
 
+    public DepartmentEntity getDepartmentById(UUID department_id) throws Exception {
+        try {
+            var department = departmentRepo.findById(department_id)
+                .orElseThrow(() -> new DepartmentNotFoundException("Кафедры не существует"));
+            return department;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
     public DepartmentEntity addTeacherToDepartment(UUID department_id, TeacherEntity teacher) throws Exception {
         try {
             DepartmentEntity department = departmentRepo.findById(department_id)

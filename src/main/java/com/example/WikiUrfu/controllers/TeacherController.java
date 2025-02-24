@@ -3,20 +3,14 @@ package com.example.WikiUrfu.controllers;
 import java.util.UUID;
 
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.WikiUrfu.DTOs.TeacherRequestDto;
 import com.example.WikiUrfu.entity.TeacherEntity;
-import com.example.WikiUrfu.exceptions.DepartmentNotFoundException;
-import com.example.WikiUrfu.exceptions.TeacherNotFoundException;
+import com.example.WikiUrfu.exceptions.*;
 import com.example.WikiUrfu.services.TeacherService;
 
 @RestController
@@ -46,7 +40,7 @@ public class TeacherController {
         } catch(DepartmentNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch(Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage());
         }
     }
 
@@ -57,13 +51,26 @@ public class TeacherController {
             return ResponseEntity.ok().body("Преподаватель успешно удален из базы");
         } catch(TeacherNotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage());
         }
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllTeachers() {
+    public ResponseEntity<?> getAllTeachers() throws Exception {
         var teachers = teachersService.getAllTeachers();
         return ResponseEntity.ok().body(teachers);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTeacherById(@PathVariable UUID id) throws Exception {
+        try {
+            var teacher = teachersService.getTeacherById(id);
+            return ResponseEntity.ok(teacher);
+        } catch (TeacherNotFoundException e) {
+            throw new TeacherNotFoundException(e.getMessage());
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }

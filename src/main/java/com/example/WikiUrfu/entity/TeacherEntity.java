@@ -1,19 +1,7 @@
 package com.example.WikiUrfu.entity;
 
 import java.util.UUID;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "teachers")
@@ -36,8 +24,8 @@ public class TeacherEntity {
     @Enumerated(EnumType.STRING)
     private AcademicRank academicRank;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "department_id", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", nullable = false)
     private DepartmentEntity department;
 
     public TeacherEntity(String name, String bio, AcademicDegree academicDegree, 
