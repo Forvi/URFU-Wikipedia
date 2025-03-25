@@ -2,6 +2,7 @@ package com.example.WikiUrfu.controllers;
 
 import java.util.UUID;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +33,7 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createDepartment(@RequestBody DepartmentRequestDto request) throws Exception {
+    public ResponseEntity<?> createDepartment(@RequestBody @Valid DepartmentRequestDto request) throws Exception {
         try {
             DepartmentEntity department = departmentService.createDepartment(
                 request.getName(), 
