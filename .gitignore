@@ -33,5 +33,12 @@ out/
 /nbdist/
 /.nb-gradle/
 
+# Dependencies ignore
+# dependency-reduced-pom.xml
+
+# Config ignore
+**/application-prod.properties
+src/main/resources/application-prod.properties
+
 ### VS Code ###
 .vscode/
