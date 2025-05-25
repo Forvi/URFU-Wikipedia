@@ -17,7 +17,7 @@ import com.example.WikiUrfu.repository.TeacherRepo;
 
 @Service
 public class TeacherService {
-    
+
     private final TeacherRepo teacherRepo;
     private final DepartmentRepo departmentRepo;
 
@@ -32,10 +32,10 @@ public class TeacherService {
         return teachers;
     }
 
-    public TeacherEntity createTeacher(String name, String bio, AcademicDegree academicDegree, 
-    AcademicRank academicRank, UUID departmentId) throws DepartmentNotFoundException {
+    public TeacherEntity createTeacher(String name, String bio, AcademicDegree academicDegree,
+                                       AcademicRank academicRank, UUID departmentId) throws DepartmentNotFoundException {
         DepartmentEntity department = departmentRepo.findById(departmentId)
-            .orElseThrow(() -> new DepartmentNotFoundException("Кафедра не найдена"));
+                .orElseThrow(() -> new DepartmentNotFoundException("Кафедра не найдена"));
 
         TeacherEntity teacher = new TeacherEntity(name, bio, academicDegree, academicRank, department);
 
@@ -44,10 +44,19 @@ public class TeacherService {
 
     public UUID deleteTeacher(UUID teacher_id) throws Exception {
         teacherRepo.findById(teacher_id)
-            .orElseThrow(() -> new TeacherNotFoundException("Преподаватель не найден"));
+                .orElseThrow(() -> new TeacherNotFoundException("Преподаватель не найден"));
 
         teacherRepo.deleteById(teacher_id);
         return teacher_id;
     }
 
+    public TeacherEntity getTeacherById(UUID teacher_id) throws Exception {
+        try {
+            var teacher = teacherRepo.findById(teacher_id).orElseThrow(() -> new TeacherNotFoundException("Преподаватель не найден"));
+                    return teacher;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }
+
