@@ -51,7 +51,7 @@ public class InstituteController {
     }
 
     @DeleteMapping("/{institute_id}")
-    public ResponseEntity<?> deleteInstituteById(@PathVariable UUID institute_id) throws Exception {
+    public ResponseEntity<?> deleteInstituteById(@PathVariable("institute_id") UUID institute_id) throws Exception {
         try {
             instituteService.deleteInstituteById(institute_id);
             System.out.println(institute_id);

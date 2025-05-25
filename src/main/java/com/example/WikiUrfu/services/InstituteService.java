@@ -36,9 +36,9 @@ public class InstituteService {
         }
     }
 
-    public InstituteEntity getInstituteById(UUID institiute_id) throws Exception {
+    public InstituteEntity getInstituteById(UUID institute_id) throws Exception {
         try {
-            var institute = institutesRepo.findById(institiute_id)
+            var institute = institutesRepo.findById(institute_id)
                 .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
 
             return institute;
