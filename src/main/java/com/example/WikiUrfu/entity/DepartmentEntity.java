@@ -7,18 +7,25 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "departments")
 public class DepartmentEntity {
     
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Getter
+    @Setter
     @Column(length = 255, nullable = false)
     private String name;
 
+    @Getter
+    @Setter
     @Lob
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -38,24 +45,6 @@ public class DepartmentEntity {
         this.name = name;
         this.description = description;
         this.institute = institute;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setName(String name) {this.name = name;}
-
-    public String getName() {
-        return name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void addTeacher(TeacherEntity teacher) {
