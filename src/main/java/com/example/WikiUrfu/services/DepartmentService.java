@@ -28,9 +28,9 @@ public class DepartmentService {
         this.instituteRepo = instituteRepo;
     }
     
-    public DepartmentEntity createDepartment(String name, String description, UUID instituteId) throws Exception {
+    public DepartmentEntity createDepartment(String name, String description, UUID institute_id) throws Exception {
         try {
-            InstituteEntity institute = instituteRepo.findById(instituteId)
+            InstituteEntity institute = instituteRepo.findById(institute_id)
                     .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
 
             DepartmentEntity department = new DepartmentEntity(name, description, institute);

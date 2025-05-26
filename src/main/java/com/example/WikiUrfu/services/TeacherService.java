@@ -33,8 +33,8 @@ public class TeacherService {
     }
 
     public TeacherEntity createTeacher(String name, String bio, AcademicDegree academicDegree,
-                                       AcademicRank academicRank, UUID departmentId) throws DepartmentNotFoundException {
-        DepartmentEntity department = departmentRepo.findById(departmentId)
+                                       AcademicRank academicRank, UUID department_id) throws DepartmentNotFoundException {
+        DepartmentEntity department = departmentRepo.findById(department_id)
                 .orElseThrow(() -> new DepartmentNotFoundException("Кафедра не найдена"));
 
         TeacherEntity teacher = new TeacherEntity(name, bio, academicDegree, academicRank, department);
