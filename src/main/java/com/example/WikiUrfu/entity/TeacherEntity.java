@@ -2,28 +2,40 @@ package com.example.WikiUrfu.entity;
 
 import java.util.UUID;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "teachers")
 public class TeacherEntity {
 
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Getter
+    @Setter
     @Column(length = 80, nullable = false)
     private String name;
 
+    @Getter
+    @Setter
     @Lob
     @Column(columnDefinition = "TEXT")
     private String bio;
 
+    @Getter
+    @Setter
     @Enumerated(EnumType.STRING)
     private AcademicDegree academicDegree;
 
+    @Getter
+    @Setter
     @Enumerated(EnumType.STRING)
     private AcademicRank academicRank;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
     private DepartmentEntity department;
@@ -40,43 +52,4 @@ public class TeacherEntity {
     public TeacherEntity() {
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setAcademicDegree(AcademicDegree academicDegree) {
-        this.academicDegree = academicDegree;
-    }
-    
-    public AcademicDegree getAcademicDegree() {
-        return academicDegree;
-    }
-
-    public void setAcademicRank(AcademicRank rank) {
-        this.academicRank = rank;
-    }
-
-    public AcademicRank getAcademicRank() {
-        return academicRank;
-    }
-
-    public void setDepartment(DepartmentEntity department) {
-        this.department = department;
-    }
-
-    public UUID getId() {
-        return id;
-    }
 }

@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
 @Entity
 @Table (name = "institutes")
 public class InstituteEntity {
@@ -15,9 +18,11 @@ public class InstituteEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Setter
     @Column(length = 255, nullable = false)
     private String name;
 
+    @Setter
     @Lob
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -34,27 +39,4 @@ public class InstituteEntity {
         this.description = description;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<DepartmentEntity> getDepartments() {
-        return departments;
-    }
 }
