@@ -33,7 +33,7 @@ public class DepartmentRequestDto {
         return description;
     }
     
-    public UUID getInstituteId() {
+     public UUID getInstituteId() {
         return institute_id;
     }
 

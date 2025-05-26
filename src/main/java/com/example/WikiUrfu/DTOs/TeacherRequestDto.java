@@ -44,9 +44,7 @@ public class TeacherRequestDto {
         return academicRank;
     }
 
-    public UUID getDepartmentId() {
-        return department_id;
-    }
+    public UUID getDepartmentId() {return department_id;}
 
     public void setName(String name) {
         this.name = name;

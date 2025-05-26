@@ -13,10 +13,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class InstituteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    //GeneratedValue(generator = "UUID")
-    //@GenericGenerator(
-    //name = "UUID",
-    //strategy = "org.hibernate.id.UUIDGenerator"
     private UUID id;
 
     @Column(length = 255, nullable = false)

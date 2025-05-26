@@ -29,12 +29,12 @@ public class TeacherEntity {
     private DepartmentEntity department;
 
     public TeacherEntity(String name, String bio, AcademicDegree academicDegree, 
-                        AcademicRank academicRank, DepartmentEntity department) {
+                        AcademicRank academicRank, DepartmentEntity department_id) {
         this.name = name;
         this.bio = bio;
         this.academicDegree = academicDegree;
         this.academicRank = academicRank;
-        this.department = department;
+        this.department = department_id;
     }
 
     public TeacherEntity() {
