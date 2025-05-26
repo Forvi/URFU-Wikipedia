@@ -37,14 +37,14 @@
 3. ~~DI~~ ✅
 4. ~~Web Service~~ ✅
 5. ~~Validation~~ ✅
-6. Config ✅ (with swagger)
+6. Config ❌
 7. ~~DB (Hibernate)~~ ✅
-8. Spring Security✅
-9. App Events and Listeners✅
-10. Aspects❌ ✅
-11. Brockers✅
-12. Support✅
-13. Jobs✅
-14. Cache✅
+8. Spring Security❌
+9. App Events and Listeners❌
+10. Aspects❌
+11. Brockers❌
+12. Support❌
+13. Jobs❌
+14. Cache❌
 
 
