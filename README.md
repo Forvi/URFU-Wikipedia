@@ -37,7 +37,7 @@
 3. ~~DI~~ ✅
 4. ~~Web Service~~ ✅
 5. ~~Validation~~ ✅
-6. Config ❌
+6. ~~Config (with Swagger)~~ ✅
 7. ~~DB (Hibernate)~~ ✅
 8. Spring Security❌
 9. App Events and Listeners❌
