@@ -16,8 +16,8 @@ import io.swagger.v3.oas.annotations.info.Info;
  */
 @OpenAPIDefinition(
         info = @Info(
-                title = "Lifemarch forecasting application - backend",
-                description = "API приложения для прогнозирования выручки магазина Жизньмарт",
+                title = "Wikiurfu Application backend",
+                description = "API для wkiurfu",
                 version = "1.0.0"
         )
 )
