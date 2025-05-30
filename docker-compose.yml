@@ -13,11 +13,11 @@ spring:
         format_sql: true
         default_batch_fetch_size: 30
 
-  #security:
-   # oauth2:
-    #  resourceserver:
-     #   jwt:
-      #    issuer-uri: https://auth.urfu.ru/realms/wikiurfu
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+        issuer-uri: https://auth.urfu.ru/realms/wikiurfu
 
   cache:
     type: caffeine
