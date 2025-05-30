@@ -75,7 +75,7 @@ public class DepartmentController {
 
     @Operation(summary = "Удалить кафедру")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDepartment(@PathVariable UUID id) {
+    public ResponseEntity<String> deleteDepartment(@PathVariable UUID id) throws DepartmentNotFoundException {
         departmentService.deleteDepartment(id);
         return ResponseEntity.ok("Кафедра успешно удалена");
     }
