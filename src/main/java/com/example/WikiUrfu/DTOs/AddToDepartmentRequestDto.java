@@ -2,34 +2,25 @@ package com.example.WikiUrfu.DTOs;
 
 import com.example.WikiUrfu.entity.AcademicDegree;
 import com.example.WikiUrfu.entity.AcademicRank;
-import com.example.WikiUrfu.entity.DepartmentEntity;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AddToDepartmentRequestDto {
-    @Setter
+    @NotBlank(message = "Имя не может быть пустым")
     private String name;
-    @Setter
+
+    @NotBlank(message = "Биография не может быть пустой")
     private String bio;
-    @Setter
+
+    @NotNull(message = "Ученая степень обязательна")
     private AcademicDegree academicDegree;
-    @Setter
+
+    @NotNull(message = "Ученое звание обязательно")
     private AcademicRank academicRank;
-    private DepartmentEntity department;
-
-    public AddToDepartmentRequestDto(DepartmentEntity department) {
-        this.department = department;
-    }
-
-    public DepartmentEntity getDepartment(DepartmentEntity department) {
-        return department;
-    }
-
-    @Override
-    public String toString() {
-        return "TeacherRequestDto [name=" + name + ", bio=" + bio + ", academicDegree=" + academicDegree
-                + ", academicRank=" + academicRank + "]";
-    }
-
 }
