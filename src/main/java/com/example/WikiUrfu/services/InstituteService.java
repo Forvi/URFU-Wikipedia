@@ -2,56 +2,60 @@ package com.example.WikiUrfu.services;
 
 
 import com.example.WikiUrfu.entity.InstituteEntity;
+import com.example.WikiUrfu.events.InstituteEvent;
 import com.example.WikiUrfu.exceptions.InstituteNotFoundException;
 import com.example.WikiUrfu.repository.InstituteRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class InstituteService {
     private final InstituteRepo institutesRepo;
+    private final ApplicationEventPublisher eventPublisher;
 
-    @Autowired
-    public InstituteService(InstituteRepo instituteRepo) {
-        this.institutesRepo = instituteRepo;
+
+    @CacheEvict(value = "institutes", allEntries = true)
+    @Transactional
+    public InstituteEntity createInstitute(String name, String description) {
+        InstituteEntity institute = new InstituteEntity(name, description);
+        InstituteEntity saved = institutesRepo.save(institute);
+
+        eventPublisher.publishEvent(new InstituteEvent(this, saved, "Создан"));
+
+        return saved;
     }
 
-    public InstituteEntity createInstitute (String name, String description) throws Exception {
-        try {
-            InstituteEntity institute = new InstituteEntity(name, description);
-            return institutesRepo.save(institute);
-        } catch(Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    @Cacheable("institutes")
+    public List<InstituteEntity> getAllInstitutes() {
+        return institutesRepo.findAll();
     }
 
-    public Iterable<InstituteEntity> getAllInstitutes() throws Exception {
-        try {
-            Iterable<InstituteEntity> institutes = institutesRepo.findAll();
-            return institutes;
-        } catch(Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    @Cacheable(value = "institutes", key = "#institute_id")
+    public InstituteEntity getInstituteById(UUID institute_id) {
+        return institutesRepo.findById(institute_id)
+                .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
     }
 
-    public InstituteEntity getInstituteById(UUID institute_id) throws Exception {
-        try {
-            var institute = institutesRepo.findById(institute_id)
+    @CacheEvict(value = "institutes", allEntries = true)
+    @Transactional
+    public UUID deleteInstituteById(UUID institute_id) {
+        InstituteEntity institute = institutesRepo.findById(institute_id)
                 .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
 
-            return institute;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
-    }
+        institutesRepo.delete(institute);
 
-    public UUID deleteInstituteById(UUID institute_id) throws Exception {
-        institutesRepo.findById(institute_id)
-            .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
+        eventPublisher.publishEvent(new InstituteEvent(
+                this, institute, "Удален"
+        ));
 
-        institutesRepo.deleteById(institute_id);
         return institute_id;
     }
 }

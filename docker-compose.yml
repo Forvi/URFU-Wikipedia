@@ -1,27 +1,48 @@
-services:
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: wikiurfu
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/wikiurfu
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/wikiurfu
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-    ports:
-      - "8080:8080"
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 30
 
-volumes:
-  postgres_data:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+        issuer-uri: https://auth.urfu.ru/realms/wikiurfu
+
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=10m
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  mail:
+    host: smtp.urfu.ru
+    port: 587
+    username: no-reply@wikiurfu.ru
+    password: MoyParolKrutoy
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+flyway:
+  locations: classpath:db/migration
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE

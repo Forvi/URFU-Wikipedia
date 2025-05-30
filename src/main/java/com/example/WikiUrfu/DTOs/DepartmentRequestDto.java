@@ -32,8 +32,8 @@ public class DepartmentRequestDto {
     public String getDescription() {
         return description;
     }
-    
-    public UUID getInstituteId() {
+
+     public UUID getInstituteId() {
         return institute_id;
     }
 
