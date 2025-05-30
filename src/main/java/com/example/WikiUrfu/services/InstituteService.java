@@ -26,33 +26,31 @@ public class InstituteService {
     @Transactional
     public InstituteEntity createInstitute(String name, String description) {
         InstituteEntity institute = new InstituteEntity(name, description);
-        InstituteEntity saved = instituteRepo.save(institute);
+        InstituteEntity saved = institutesRepo.save(institute);
 
-        eventPublisher.publishEvent(new InstituteEvent(
-                this, saved, "Создан"
-        ));
+        eventPublisher.publishEvent(new InstituteEvent(this, saved, "Создан"));
 
         return saved;
     }
 
     @Cacheable("institutes")
     public List<InstituteEntity> getAllInstitutes() {
-        return instituteRepo.findAll();
+        return institutesRepo.findAll();
     }
 
     @Cacheable(value = "institutes", key = "#institute_id")
     public InstituteEntity getInstituteById(UUID institute_id) {
-        return instituteRepo.findById(institute_id)
+        return institutesRepo.findById(institute_id)
                 .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
     }
 
     @CacheEvict(value = "institutes", allEntries = true)
     @Transactional
     public UUID deleteInstituteById(UUID institute_id) {
-        InstituteEntity institute = instituteRepo.findById(institute_id)
+        InstituteEntity institute = institutesRepo.findById(institute_id)
                 .orElseThrow(() -> new InstituteNotFoundException("Институт не найден"));
 
-        instituteRepo.delete(institute);
+        institutesRepo.delete(institute);
 
         eventPublisher.publishEvent(new InstituteEvent(
                 this, institute, "Удален"
