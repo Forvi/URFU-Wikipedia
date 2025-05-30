@@ -1,62 +1,74 @@
 package com.example.WikiUrfu.services;
 
 import java.util.UUID;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.WikiUrfu.entity.*;
+import com.example.WikiUrfu.events.TeacherEvent;
+import com.example.WikiUrfu.exceptions.*;
+import com.example.WikiUrfu.repository.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-
-import com.example.WikiUrfu.entity.AcademicDegree;
-import com.example.WikiUrfu.entity.AcademicRank;
-import com.example.WikiUrfu.entity.DepartmentEntity;
-import com.example.WikiUrfu.entity.TeacherEntity;
-import com.example.WikiUrfu.exceptions.DepartmentNotFoundException;
-import com.example.WikiUrfu.exceptions.TeacherNotFoundException;
-import com.example.WikiUrfu.repository.DepartmentRepo;
-import com.example.WikiUrfu.repository.TeacherRepo;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@RequiredArgsConstructor
 public class TeacherService {
 
     private final TeacherRepo teacherRepo;
     private final DepartmentRepo departmentRepo;
+    private final ApplicationEventPublisher eventPublisher;
 
-    @Autowired
-    public TeacherService(TeacherRepo teacherRepo, DepartmentRepo departmentRepo) {
-        this.teacherRepo = teacherRepo;
-        this.departmentRepo = departmentRepo;
+    @Cacheable("teachers")
+    public List<TeacherEntity> getAllTeachers() {
+        return (List<TeacherEntity>) teacherRepo.findAll();
     }
 
-    public Iterable<TeacherEntity> getAllTeachers() {
-        var teachers = teacherRepo.findAll();
-        return teachers;
-    }
-
+    @CacheEvict(value = "teachers", allEntries = true)
+    @Transactional
     public TeacherEntity createTeacher(String name, String bio, AcademicDegree academicDegree,
                                        AcademicRank academicRank, UUID department_id) throws DepartmentNotFoundException {
+
         DepartmentEntity department = departmentRepo.findById(department_id)
                 .orElseThrow(() -> new DepartmentNotFoundException("Кафедра не найдена"));
 
         TeacherEntity teacher = new TeacherEntity(name, bio, academicDegree, academicRank, department);
+        TeacherEntity saved = teacherRepo.save(teacher);
 
-        return teacherRepo.save(teacher);
+        eventPublisher.publishEvent(new TeacherEvent(
+                this,
+                saved,
+                "Создан"
+        ));
+
+        return saved;
     }
 
-    public UUID deleteTeacher(UUID teacher_id) throws Exception {
-        teacherRepo.findById(teacher_id)
+    @CacheEvict(value = "teachers", key = "#teacher_id")
+    @Transactional
+    public UUID deleteTeacher(UUID teacher_id) throws TeacherNotFoundException {
+        TeacherEntity teacher = teacherRepo.findById(teacher_id)
                 .orElseThrow(() -> new TeacherNotFoundException("Преподаватель не найден"));
 
-        teacherRepo.deleteById(teacher_id);
+        teacherRepo.delete(teacher);
+
+        eventPublisher.publishEvent(new TeacherEvent(
+                this,
+                teacher,
+                "Удален"
+        ));
+
         return teacher_id;
     }
 
-    public TeacherEntity getTeacherById(UUID teacher_id) throws Exception {
-        try {
-            var teacher = teacherRepo.findById(teacher_id).orElseThrow(() -> new TeacherNotFoundException("Преподаватель не найден"));
-                    return teacher;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    @Cacheable(value = "teachers", key = "#teacher_id")
+    public TeacherEntity getTeacherById(UUID teacher_id) throws TeacherNotFoundException {
+        return teacherRepo.findById(teacher_id)
+                .orElseThrow(() -> new TeacherNotFoundException("Преподаватель не найден"));
     }
 }
 

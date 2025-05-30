@@ -1,17 +1,17 @@
 package com.example.WikiUrfu.DTOs;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@Setter
-@Getter
+@Data
 public class CreateInstituteRequestDto {
-    private String name;
-    private String description;
 
-    @Override
-    public String toString() {
-        return "CreateInstituteRequestDto{" + "name='" + name + '\'' + ", description='" + description + '\'' + '}';
-    }
+    @NotBlank(message = "Название института обязательно")
+    @Size(max = 100, message = "Название института не должно превышать 100 символов")
+    private String name;
+
+    @Size(max = 1000, message = "Описание не должно превышать 1000 символов")
+    private String description;
 }

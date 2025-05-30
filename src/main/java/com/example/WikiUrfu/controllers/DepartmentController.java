@@ -1,106 +1,82 @@
 package com.example.WikiUrfu.controllers;
 
+import com.example.WikiUrfu.entity.TeacherEntity;
+import jakarta.validation.Valid;
+
+import java.util.List;
 import java.util.UUID;
 
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.example.WikiUrfu.DTOs.AddToDepartmentRequestDto;
 import com.example.WikiUrfu.DTOs.DepartmentRequestDto;
 import com.example.WikiUrfu.entity.DepartmentEntity;
-import com.example.WikiUrfu.entity.TeacherEntity;
 import com.example.WikiUrfu.exceptions.DepartmentNotFoundException;
 import com.example.WikiUrfu.services.DepartmentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/department")
+@RequiredArgsConstructor
+@Tag(name = "Department Management", description = "Управление кафедрами")
 public class DepartmentController {
-    
-    private DepartmentService departmentService;
 
-    @Autowired
-    public DepartmentController(DepartmentService departmentService) {
-        this.departmentService = departmentService;
-    }
+    private final DepartmentService departmentService;
 
+    @Operation(summary = "Создать кафедру")
+    @ApiResponse(responseCode = "200", description = "Кафедра создана")
     @PostMapping
-    public ResponseEntity<?> createDepartment(@RequestBody @Valid DepartmentRequestDto request) throws Exception {
-        try {
-            DepartmentEntity department = departmentService.createDepartment(
-                request.getName(), 
+    public ResponseEntity<DepartmentEntity> createDepartment(
+            @RequestBody @Valid DepartmentRequestDto request) {
+
+        DepartmentEntity department = departmentService.createDepartment(
+                request.getName(),
                 request.getDescription(),
                 request.getInstituteId()
-            );
+        );
 
-            return ResponseEntity.ok(department);
-        } catch(DepartmentNotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        } catch(Exception e) {
-            return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage());
-        }
+        return ResponseEntity.ok(department);
     }
 
+    @Operation(summary = "Получить все кафедры")
     @GetMapping
-    public ResponseEntity<?> getAllDepartments() {
-        try {
-            var departments = departmentService.getAllDepartments();
-            return ResponseEntity.ok(departments);
-        } catch(Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
-        }
+    public ResponseEntity<List<DepartmentEntity>> getAllDepartments() {
+        return ResponseEntity.ok(departmentService.getAllDepartments());
     }
 
+    @Operation(summary = "Получить кафедру по ID")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getDepartmentById(@PathVariable UUID id) throws Exception {
-        try {
-            var department = departmentService.getDepartmentById(id);
-            return ResponseEntity.ok(department);
-        } catch (DepartmentNotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage());
-        }
+    public ResponseEntity<DepartmentEntity> getDepartmentById(
+            @PathVariable UUID id) throws DepartmentNotFoundException {
+
+        return ResponseEntity.ok(departmentService.getDepartmentById(id));
     }
 
+    @Operation(summary = "Добавить преподавателя на кафедру")
     @PutMapping("/{id}")
-    public ResponseEntity<?> addTeacherToDepartment(@PathVariable UUID id, 
-    @RequestBody AddToDepartmentRequestDto request) throws Exception {
-        try {
-            TeacherEntity teacher = new TeacherEntity(
+    public ResponseEntity<DepartmentEntity> addTeacherToDepartment(
+            @PathVariable UUID id,
+            @RequestBody AddToDepartmentRequestDto request) throws DepartmentNotFoundException {
+
+        TeacherEntity teacher = new TeacherEntity(
                 request.getName(),
                 request.getBio(),
                 request.getAcademicDegree(),
                 request.getAcademicRank(),
-                request.getDepartment()
-            );
+                null
+        );
 
-            departmentService.addTeacherToDepartment(id, teacher);
-            return ResponseEntity.ok().body("Преподаватель успешно добавлен на кафедру");
-        } catch (DepartmentNotFoundException e) {
-            throw new Exception(e.getMessage());
-        } catch(Exception e) {
-            return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage());
-        }
+        return ResponseEntity.ok(departmentService.addTeacherToDepartment(id, teacher));
     }
 
+    @Operation(summary = "Удалить кафедру")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteDepartment(@PathVariable UUID id) throws Exception {
-        try {
-            departmentService.deleteDepartment(id);
-            return ResponseEntity.ok().body("Кафедра успешно удалена из базы");
-        } catch (DepartmentNotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage());
-        }
+    public ResponseEntity<String> deleteDepartment(@PathVariable UUID id) {
+        departmentService.deleteDepartment(id);
+        return ResponseEntity.ok("Кафедра успешно удалена");
     }
 }
